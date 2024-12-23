@@ -1,0 +1,16 @@
+# Ignore JetBrains IDEs (IntelliJ IDEA, PyCharm, etc.)
+.idea/
+
+# Ignore Visual Studio Code settings
+.vscode/
+.vscode/*
+
+# General editor backup files
+*.swp
+*.swo
+*~
+*.bak
+
+# OS-generated files
+.DS_Store
+Thumbs.db
