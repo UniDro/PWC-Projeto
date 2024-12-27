@@ -8,7 +8,12 @@ $(document).ready(function(){
     apiCall("https://restcountries.com/v3.1/all?fields=name,cca3,flags,capital", displayPaises, 5)
 })
 
-
+$(".custom-search-bar").on("click", "#searchBtn", function(){
+    const searchVal = $("#searchBar").val();
+    const url = "https://restcountries.com/v3.1/name/"+searchVal+"?fields=name,cca3,flags,capital"
+    console.log(url);
+    apiCall(url, displayPaises);
+})
 
 $(".pais-display").on("click", ".btn-icon-fav", function(){
     let id = $(this).attr("id");
