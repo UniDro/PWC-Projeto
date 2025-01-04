@@ -20,7 +20,36 @@ function randomPaises(dataPaises)
     
     $.each(randomIndexes, function(index, randomIndexes){
         console.log(dataPaises[randomIndexes])
-        //TODO: Em vez do console.log() dar append na row que tem os paises no home
+        let nomepais = dataPaises[randomIndexes].name['common']
+        let imagem = dataPaises[randomIndexes].flags['png']
+        let card = 
+        `
+            <div class="country-card">
+                <img src="${imagem}" alt="Bandeira Pais aleatório">
+                <h3>${nomepais}</h3>
+            </div>
+        `;
+        $(".countries-container").append(card)
     })
 
+    
+
 }
+
+/*<!-- Cartão 1 -->
+          <div class="country-card">
+            <img src="assets/img/eua.png" alt="Bandeira dos EUA">
+            <h3>Estados Unidos da América</h3>
+          </div>
+    
+          <!-- Cartão 2 -->
+          <div class="country-card">
+            <img src="assets/img/canada.png" alt="Bandeira do Canadá">
+            <h3>Canadá</h3>
+          </div>
+    
+          <!-- Cartão 3 -->
+          <div class="country-card">
+            <img src="assets/img/pt.jpg" alt="Bandeira do Reino Unido">
+            <h3>Portugal</h3>
+          </div>*/
