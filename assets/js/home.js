@@ -1,55 +1,105 @@
-import {apiCall} from "./api.js";
+import { apiCall } from "./api.js";
 
-$(document).ready(function(){
-    apiCall("https://restcountries.com/v3.1/all?fields=name,flags", randomPaises)
-})
+$(document).ready(function() {
+    let paisId = new URLSearchParams(window.location.search).get('id');
 
-function randomPaises(dataPaises)
-{
-    const arrlength = dataPaises.length;
-    let elementosPaisesMostrar = new Set(); //Num set não pode haver números repetidos logo o while garante que nunca temos 3 paises repetidos.
+    apiCall(`https://restcountries.com/v3.1/alpha/${paisId}`, detalhespais);
     
-    while(elementosPaisesMostrar.size < 3){
-        console.log("Tou no loop infinito" + elementosPaisesMostrar)
-        const elementoRandom = Math.floor(Math.random()*arrlength);
-        elementosPaisesMostrar.add(elementoRandom);
+   
+    apiCall("https://restcountries.com/v3.1/all?fields=name,flags,cca3", randomPaises);
+    
+});
 
+function randomPaises(dataPaises) {
+    const arrlength = dataPaises.length;
+    let elementosPaisesMostrar = new Set(); // Num set não pode haver números repetidos, logo o while garante que nunca temos 3 paises repetidos.
+
+    while (elementosPaisesMostrar.size < 3) {
+        const elementoRandom = Math.floor(Math.random() * arrlength);
+        elementosPaisesMostrar.add(elementoRandom);
     }
 
     const randomIndexes = Array.from(elementosPaisesMostrar);
-    
-    $.each(randomIndexes, function(index, randomIndexes){
-        console.log(dataPaises[randomIndexes])
-        let nomepais = dataPaises[randomIndexes].name['common']
-        let imagem = dataPaises[randomIndexes].flags['png']
-        let card = 
-        `
-            <div class="country-card">
-                <img src="${imagem}" alt="Bandeira Pais aleatório">
-                <h3>${nomepais}</h3>
+
+    $.each(randomIndexes, function(index, randomIndex) {
+        let nomePais = dataPaises[randomIndex].name['common'];
+        let imagem = dataPaises[randomIndex].flags['png'];
+        let id = dataPaises[randomIndex].cca3;
+
+        let card = `
+            <div class="country-card" data-id="${id}">
+                <img src="${imagem}" alt="Bandeira do País aleatório">
+                <h3>${nomePais}</h3>
             </div>
         `;
-        $(".countries-container").append(card)
-    })
+        
+        $(".countries-container").append(card);
+    });
 
-    
-
+    $(".countries-container").on("click", ".country-card", function() {
+        let id = $(this).data("id");
+        window.location.href = 'detalhespais.html?id=' + id;
+    });
 }
 
-/*<!-- Cartão 1 -->
-          <div class="country-card">
-            <img src="assets/img/eua.png" alt="Bandeira dos EUA">
-            <h3>Estados Unidos da América</h3>
-          </div>
-    
-          <!-- Cartão 2 -->
-          <div class="country-card">
-            <img src="assets/img/canada.png" alt="Bandeira do Canadá">
-            <h3>Canadá</h3>
-          </div>
-    
-          <!-- Cartão 3 -->
-          <div class="country-card">
-            <img src="assets/img/pt.jpg" alt="Bandeira do Reino Unido">
-            <h3>Portugal</h3>
-          </div>*/
+function detalhespais(data) {
+    let pais = data[0];
+
+    let fotoPais = pais.flags['png'];
+    let nomeCommon = pais.name['common'];
+    let capital = pais.capital[0];
+    let area = pais.area;
+    let population = pais.population;
+    let region = pais.region;
+    let subregion = pais.subregion;
+    let currency = pais.currencies[Object.keys(pais.currencies)[0]].name;
+    let id = pais.cca3; 
+    let favIcon = "assets/img/fav-empty.svg";
+    let btn = "btn-icon-fav";
+
+    if (isPaisFavorite(id)) {
+        favIcon = "assets/img/fav-full.svg";
+        btn = "btn-icon-defav";
+    }
+
+    let detalhes = `
+        <div class="row">
+            <div class="col-6">
+                <img src="${fotoPais}" class="img-fluid" alt="Foto do Pais">
+            </div>
+            <div class="col-6">
+                <h1>${nomeCommon}</h1>
+                <p>Capital: ${capital}</p>
+                <p>Área: ${area} km²</p>
+                <p>População: ${population}</p>
+                <p>Região: ${region}</p>
+                <p>Sub-região: ${subregion}</p>
+                <p>Moeda: ${currency}</p>
+
+                <!-- Botão de favorito -->
+                <button class="${btn}" id="${id}">
+                    <img src="${favIcon}" class="img-fluid" alt="Ícone de favorito">
+                </button>
+            </div>
+        </div>
+    `;
+    $(".detalhes-pais").html(detalhes);
+
+    function isPaisFavorite(id) {
+        return localStorage.getItem(id) !== null;
+    }
+
+    $(".detalhes-pais").on("click", ".btn-icon-fav", function() {
+        let id = $(this).attr("id");
+        localStorage.setItem(id, id);
+        $(this).removeClass('btn-icon-fav').addClass('btn-icon-defav');
+        $(this).find('img').attr("src", "assets/img/fav-full.svg");
+    });
+
+    $(".detalhes-pais").on("click", ".btn-icon-defav", function() {
+        let id = $(this).attr("id");
+        localStorage.removeItem(id);
+        $(this).removeClass('btn-icon-defav').addClass('btn-icon-fav');
+        $(this).find('img').attr("src", "assets/img/fav-empty.svg");
+    });
+}

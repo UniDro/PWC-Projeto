@@ -49,7 +49,7 @@ function displayPaises(dataPaises){
             
 
             let card = 
-        `        <div class = "col-md-3">
+        `       
                     <div class="card">
                         <img class="card-img-top custom-img" src="${fotoPais}" alt="Foto do Pais">
                         <div class="card-body">
@@ -69,7 +69,7 @@ function displayPaises(dataPaises){
                             </div>
                         </div>
                     </div>
-                 </div>   
+                
         `;
             $(".pais-display").append(card);
         }
