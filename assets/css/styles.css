@@ -1,3 +1,17 @@
+.card-img-top{
+    width: 100%;
+    height: 15vw;
+}
+
+.btn-icon-fav, .btn-icon-defav{
+    /*Botão que contém o icon favorito*/
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: #ffff;
+
 .nav-but{
     background: none;
     border: 2px solid #ffa500;
